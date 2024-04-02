@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Mukta:wght@200;300;400;500;600;700;800&family=Poppins:wght@500&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet"  href="./css/workerdetails.css">
+    <link rel="stylesheet"  href="./css/workerprofile.css">
 </head>
 <body>
     <div id="preloader">
@@ -19,17 +19,18 @@
         <nav>
           <ul>
             <a href="/"><li>HOME</li></a>
-                <a href="/#thirdsec"><li>SERVICES</li></a>
-                <a href="/userdashboard"><li>DASHBOARD</li></a>
-                <a href="/userprofileedit"><li>PROFILE</li></a>
-                <a href="/about"><li>ABOUT</li></a>
-                <a href="/logout"><li>LOGOUT</li></a>
+            <a href="/#thirdsec"><li>SERVICES</li></a>
+            <a href="/workerdashboard"><li>DASHBOARD</li></a>
+            <a href="/workerprofileedit"><li>PROFILE</li></a>
+            <a href="/about"><li>ABOUT</li></a>
+            <a href="/logout"><li>LOGOUT</li></a>
+                  
           </ul>
       </nav>
     </header>
     <div id="wrapper">
         <div id="container">
-            <div class="title">WORKER DETAILS
+            <div class="title">WORKER  PROFILE
             </div>
             <div id="firstsec">
                 <div id="deetscontainer">
@@ -46,17 +47,28 @@
                 <div id="imgbook">
                     <img src="./images/<%=data.profession%>.jpeg" alt="workerimage">
                 </div>
+                
             </div>
-            <a href="/bookings"><button class="button"><span class="button-content">Book now</span></button></a>
+            <div id="switches">
+                <h2><span class="label">Status:</span></h2>
+                <label class="switch">
+                    <input type="checkbox" id="status" onclick="statuschange('<%= data.status %>')" <%= data.status == "available" ? "checked" : "" %>>
+                    <div class="slider"></div>
+                    <div class="slider-card">
+                      <div class="slider-card-face slider-card-front"></div>
+                      <div class="slider-card-face slider-card-back"></div>
+                    </div>
+                  </label>
+            </div>
             <div id="ratecontainer">
                 <h1>Reviews</h1>
                 <div id="reviewgrid">
                     <% data.reviews.forEach(function(review) { %>
                         <div class="record">
                             <h3><%= review.reviewer %>
-                                <span class="rating"><% for (let i = 1; i < review.rating; i++) { %>
+                                <% for (let i = 1; i <= review.rating; i++) { %>
                                     <span class="star">&#9733;</span>
-                                <% } %></span>
+                                <% } %>
                             </h3>
                             <p><%= review.review %></p>
                         </div>
@@ -67,6 +79,7 @@
         </div>
         </div>
     </div>
+    <script src="/scripts/workerprofile.js"></script>
     <script>
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');

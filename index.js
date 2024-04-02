@@ -30,7 +30,7 @@ app.route('/usersignup')
         const {name,email,address,city,pincode,contact,password} = req.body;
         const user = new Users({name:name, email:email, address:address, city:city, pincode:pincode, contact:contact,password:password });
         await user.save().then(() => {
-            res.send('Data saved');
+            res.redirect('/userlogin');
         });
     });
 
@@ -57,7 +57,7 @@ app.route('/workersignup')
         const { name, description, email, address, city, pincode, contact, profession, password } = req.body;
         const worker = new Workers({ name, description, email, address, city, pincode, contact, profession, password });
         await worker.save().then(() => {
-            res.send('Data saved');
+            res.redirect('/workerlogin');
         });
     });
 
@@ -70,16 +70,25 @@ app.route("/workerlogin")
         await Workers.findOne({ email: email, password: password }).then(async(data) => {
             if (data) {
                 req.session.workmyid = data.id;
-                await Bookings.find({ workerid: data.id, bookingstatus: { $in: ["pending", "accepted"] } })
+                await Bookings.find({ workerid: data.id, bookingstatus: { $in: ["pending", "done"] } })
                     .populate('userid', 'name email address city pincode contact')
                     .then((books) => {
-                        res.render('workerdashboard', { books, data });
+                        res.render('workerprofile', { books, data });
                     });
             }
             else {
                 res.send('failed to login');
             }
         });
+    });
+app.route('/workerdashboard')
+    .get(async (req, res) => {
+        const workerid = req.session.workmyid;
+        await Bookings.find({ workerid: workerid, bookingstatus: { $in: ["pending", "done"] } })
+            .populate('userid', 'name email address city pincode contact')
+            .then((books) => {
+                res.render('workerdashboard', { books });
+            });
     });
 app.route("/userhome")
     .get(async (req, res) => {
@@ -118,7 +127,6 @@ app.route("/bookconfirm")
         const problemStatement = req.body.problemStatement;
         const booking = new Bookings({ workerid, userid, date, time, locationLink, problem, problemStatement });
         await booking.save().then((data) => {
-            console.log(data);
             res.redirect('/userdashboard');
         });
     });
@@ -139,21 +147,18 @@ app.route("/acceptbooking")
         const bookingStatus = req.body.bookingstatus;
 
         await Bookings.findByIdAndUpdate(bookingId, { $set: { bookingstatus: bookingStatus } })
-            .then(() => {
-                res.send('Booking status updated');
-            })
             .catch((error) => {
                 console.log(error);
                 res.send('Failed to update booking status');
             });
     });
 
-    app.route("/cancelstatus")
+    app.route("/deleteentryuser")
         .post(async (req, res) => {
             const bookingId = req.body.bookingid;
-            await Bookings.findByIdAndUpdate(bookingId, { $set: { bookingstatus: "pending" } })
+            await Bookings.findByIdAndDelete(bookingId)
                 .then(() => {
-                    res.send('Booking status updated');
+                    res.redirect('/userdashboard');
                 })
                 .catch((error) => {
                     console.log(error);
@@ -161,6 +166,18 @@ app.route("/acceptbooking")
                 });
         });
 
+        app.route("/deleteentryworker")
+        .post(async (req, res) => {
+            const bookingId = req.body.bookingid;
+            await Bookings.findByIdAndDelete(bookingId)
+                .then(() => {
+                    res.redirect('/workerdashboard');
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.send('Failed to update booking status');
+                });
+        });
     app.route('/rejectbooking')
         .post(async (req, res) => {
             const bookingId = req.body.bookingid;
@@ -204,6 +221,9 @@ app.route("/acceptbooking")
         .post(async (req, res) => {
             const bookingId = req.body.bookingid;
             await Bookings.findOneAndUpdate({ _id: bookingId }, { $set: { paymentstatus: "paid" } })
+            .then(() => {
+                res.redirect('/userdashboard');
+            })
                 .catch((error) => {
                     console.log(error);
                     res.send('Failed to update payment status');
@@ -248,13 +268,18 @@ app.route("/acceptbooking")
                 .then(async(data) => {
                     await Workers.findById(data.workerid).then(async(worker) => {
                         const newRating = (Number(worker.rating) + Number(rating)) / 2;
-                        const newReview = { reviewer: data.userid.name, review: review };
+                        const newReview = { reviewer: data.userid.name, review: review,rating:rating };
                         await Workers.findByIdAndUpdate(data.workerid, {
                             noofratings: worker.noofratings + 1,
                             rating: newRating,
                             $push: { reviews: newReview }
-                        }).then(() => {
-                            res.send("done");
+                        }).then(async() => {
+                            await Bookings.findByIdAndUpdate(bookingid, { reviewstatus: "done" }).then(() => {
+                                res.redirect('/userdashboard');
+                            }).catch(err => {
+                                console.error("Error updating booking:", err);
+                                res.status(500).send("Error updating booking");
+                            });
                         }).catch(err => {
                             console.error("Error updating worker:", err);
                             res.status(500).send("Error updating worker");
@@ -268,7 +293,29 @@ app.route("/acceptbooking")
                     res.status(500).send("Error finding booking");
                 });
         });
-
+        app.route('/workerstatus')
+            .post(async(req, res) => {
+                const status = req.body.status;
+                const workerid = req.session.workmyid;
+                await Workers.findByIdAndUpdate(workerid, { status: status }).then(() => {
+                    res.sendStatus(200);
+                }).catch((error) => {
+                    console.log(error);
+                    res.sendStatus(500);
+                });
+            });
+        app.route('/about')
+            .get((req, res) => {
+                res.sendFile(__dirname + '/public/about.html');
+            });
+        app.route('/logout')
+            .get((req, res) => {
+                req.session.destroy();
+                res.redirect('/');
+            });
+        app.get('/favicon.ico', (req, res) => {
+            res.status(204);
+        });
     app.listen(3000, () => {
         console.log('Server is running on port 3000');
     });

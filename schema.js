@@ -20,9 +20,9 @@ const workerSchema = new Schema({
   pincode: Number,
   contact: Number,
   profession: String,
-  rating: { type: Number, default: 0 },
+  rating: { type: Number, default: 2 },
   noofratings: { type: Number, default: 0 },
-  reviews: [{ reviewer: String, review: String }],
+  reviews: [{ reviewer: String, review: String, rating: Number}],
   password: String,
   status: { type: String, default: "available" },
 });
@@ -37,6 +37,7 @@ const bookingSchema=new Schema({
   problemStatement:String,
   paymentstatus:{type:String,default:'pending'},
   bookingstatus:{type:String,default:'pending'},
+  reviewstatus:{type:String,default:'pending'},
   baseprice:{type:Number,default:700},
 });
 module.exports = {

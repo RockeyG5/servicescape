@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <link rel="stylesheet"  href="./css/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,15 +12,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Mukta:wght@200;300;400;500;600;700;800&family=Poppins:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="preloader">
+        <div class="bar">
+            <div class="ball"></div>
+        </div>
+    </div>
+    
     <section id="firstsec">
         <header>
             <div id="title">SERVICESCAPE</div>
             <nav>
                 <ul>
-                    <li>HOME</li>
-                    <li>ABOUT</li>
-                    <li>CONTACT</li>
-                    <li>LOGIN</li>
+                    <a href="/"><li>HOME</li></a>
+                    <a href="#thirdsec"><li>SERVICES</li></a>
+                    <a href="#secondsection"><li>WORKER</li></a>
+                    <a href="/about"><li>ABOUT</li></a>
+                    
                 </ul>
             </nav>
         </header>
@@ -81,5 +88,114 @@
         <img  id='workerimg'src="images/work.png" alt="firstsec">
     </div>
    </section>
+   <section id="thirdsec">
+        <img src="images/professional-img.png" class="testimg" alt="firstsec">
+        <section id="gridsection">
+            <div class="grid-container">
+                <div class="card">
+                    <div class="first-content">
+                      <img src="images/carpenter.jpeg" class= 'testgridimg' alt="Carpenter">
+                    </div>
+                    <div class="second-content">
+                  <span>Carpenter</span>
+                    </div>
+                  </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/plumber.jpeg" class= 'testgridimg' alt="Plumber">
+                        </div>
+                        <div class="second-content">
+                            <span>Plumber</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/electrician.jpeg" class= 'testgridimg' alt="Electrician">
+                        </div>
+                        <div class="second-content">
+                            <span>Electrician</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/technician.jpeg" class= 'testgridimg' alt="Technician">
+                        </div>
+                        <div class="second-content">
+                            <span>Technician</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/cleaner.jpeg" class= 'testgridimg' alt="Cleaner">
+                        </div>
+                        <div class="second-content">
+                            <span>Cleaner</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/mason.jpeg" class= 'testgridimg' alt="Mason">
+                        </div>
+                        <div class="second-content">
+                            <span>Mason</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/pain.jpg" class= 'testgridimg' alt="Painter">
+                        </div>
+                        <div class="second-content">
+                            <span>Painter</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/int.jpg" class= 'testgridimg' alt="Interior Designer">
+                        </div>
+                        <div class="second-content">
+                            <span>Interior design</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/roofer.jpeg" class= 'testgridimg' alt="Roofer">
+                        </div>
+                        <div class="second-content">
+                            <span>Roofer</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/landscaper.jpeg" class= 'testgridimg' alt="Landscaper">
+                        </div>
+                        <div class="second-content">
+                            <span>Landscaper</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/pestcontrol.jpeg" class= 'testgridimg' alt="Pest Control">
+                        </div>
+                        <div class="second-content">
+                            <span>Pest Control</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="first-content">
+                        <img src="images/mechanic.jpeg" class= 'testgridimg' alt="Mechanic">
+                        </div>
+                        <div class="second-content">
+                            <span>Mechanic</span>
+                        </div>
+                    </div>
+              </div>
+           </section>     
+</section>
+<script>
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        preloader.style.display = 'none';
+    });
+</script>
 </body>
 </html>
